@@ -4,12 +4,13 @@
 
 bool MCTS_Reasoner::Init(std::string _id, AIBrainBlackboardBase& _context)
 {
+
 	actorBlackboard = &_context;
 	reasonerID = _id;
 	Global_Blackboard = AIBlackboard_Global::getInstance();
 	return true;
-
 }
+
 
 void MCTS_Reasoner::Think()
 {
@@ -23,8 +24,9 @@ void MCTS_Reasoner::Think()
 	BOARD_SQUARE_STATE _aiMarker = (BOARD_SQUARE_STATE)Global_Blackboard->GetValueInt("AIMarker");
 	int _maxRuns = (BOARD_SQUARE_STATE)Global_Blackboard->GetValueInt("MaxRuns");
 
+
 	//set the active player and the current main game state
-	rootNode->setActivePlayer(_playerMarker); 
+	rootNode->setActivePlayer(_playerMarker);
 	rootNode->setGameState(_mainState);
 
 
@@ -45,7 +47,7 @@ void MCTS_Reasoner::Think()
 		// expandedNode will be NULL if it's a leaf node and simulation is not possible
 		if (!expandedNode == NULL)
 		{
-			// Simulate - Simulate to an end point, starting with aiMarker turn. 	
+			// Simulate - Simulate to an end point, starting with aiMarker turn.
 			expandedNode->Simulate(_aiMarker);
 
 			// CalcResult will trigger the back propagation of the result to the root node
@@ -57,7 +59,6 @@ void MCTS_Reasoner::Think()
 	} while (runCount < _maxRuns);
 
 
-
 	// perform the action - find child node with highest ranking
 	TicTacToeNode* highestChild = rootNode->FindHighestRankingChild();
 	GameAction bestAction = highestChild->getGameState().gameAction;
@@ -65,44 +66,36 @@ void MCTS_Reasoner::Think()
 	// only a single option - make a move
 	selectedOption = options[0];
 
-	// update the blackboard with the selected action
-	actorBlackboard->EditValueInt("Row", bestAction.row);
-	actorBlackboard->EditValueInt("Col", bestAction.col);
+	// update the blackboard with the selected action (Connect 4 only needs column)
+	actorBlackboard->EditValueInt("Col", bestAction.column);
+
 
 	//track data for output
-	std::vector < std::pair<int,int> >  _availableMoves = _mainState.GetPossibleMoves();
+	std::vector<int> _availableMoves = _mainState.GetPossibleMoves();
 
-	std::vector <int> _nodeVisits;
-	std::vector <int> _nodeWins;
-	std::vector <int> _nodeActionRow;
-	std::vector <int> _nodeActionCol;
 
-	Global_Blackboard->EditValueVec2f("AIMove", AIMath_Global::Vector2f(bestAction.col, bestAction.row));
+	// track total wins in children
+	std::vector<int> _nodeWins;
+	std::vector<int> _nodeVisits;
+	std::vector<int> _nodeActionRow;
+	std::vector<int> _nodeActionCol;
 
-	for (int i = 0; i < rootNode->getBranches().size(); i++)
+	for (TicTacToeNode* child : rootNode->getBranches())
 	{
-		int _r = rootNode->getBranches()[i]->getGameState().gameAction.row;
-		int _c = rootNode->getBranches()[i]->getGameState().gameAction.col;
-
-		_nodeWins.push_back(rootNode->getBranches()[i]->getWins());
-		_nodeVisits.push_back(rootNode->getBranches()[i]->getVisits());
-
-		_nodeActionCol.push_back(_c);
-		_nodeActionRow.push_back(_r);
-
-
-		
+		_nodeWins.push_back(child->getWins());
+		_nodeVisits.push_back(child->getVisits());
+		// For Connect 4, we only track column (no row needed due to gravity)
+		_nodeActionCol.push_back(child->getGameState().gameAction.column);
 	}
 
-	//update data for output
+
 	Global_Blackboard->EditValueIntVec("AINodeWins", _nodeWins);
 	Global_Blackboard->EditValueIntVec("AINodeVisits", _nodeVisits);
-	Global_Blackboard->EditValueIntVec("AINodeRow", _nodeActionRow);
+	// Removed AINodeRow since Connect 4 doesn't need it
 	Global_Blackboard->EditValueIntVec("AINodeCol", _nodeActionCol);
 
-	
-	delete rootNode;
 
+	delete rootNode;
 }
 
 
@@ -110,9 +103,7 @@ void MCTS_Reasoner::Think()
 
 
 
-
-
-// - AI Framework Code - 
+// - AI Framework Code -
 
 void MCTS_Reasoner::SetOptions(AIConstructorBase& _constructor)
 {
