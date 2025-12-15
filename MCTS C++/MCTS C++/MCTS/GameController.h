@@ -43,9 +43,9 @@ private:
 
 
 	// constants
-	static const int mapWidth = 3;
-	static const int mapHeight = 3;
-	const float mapSectionXY = 256.0f;
+	static const int mapWidth = 7;
+	static const int mapHeight = 6;
+	const float mapSectionXY = 98.0f;
 
 	const int maxRuns = 1000;
 
