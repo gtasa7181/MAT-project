@@ -561,9 +561,8 @@ bool GameController::isValidMove(int _row, int _col)
 /*
 * MakeMove will update the game board with the provided row/col. The move should be a valid one, checked by isValidMove(). 
 */
-void GameController::MakeMove(int _row, int _col) 
-{
-    mainGameState.SetAndApplyAction(GameAction(_row, _col, markerTurn));
+void GameController::MakeMove(int _col)  // Connect 4 only needs column{{
+	mainGameState.SetAndApplyAction(GameAction(_col, markerTurn));
 
     std::ostringstream  os;
     std::string _p = "Marker ";
