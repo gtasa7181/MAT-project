@@ -26,7 +26,7 @@ public:
 	void Update(float dt);
 	void HandleKeyPress(const sf::Event::KeyPressed* _keyPress);
 	void HandleMousePress(const sf::Event::MouseButtonPressed* _mousePress);
-	void MakeMove(int _row, int _col);
+	void MakeMove(int _col);  // Connect 4 only needs column
 
 	// Rendering
 	void DisplayUI(sf::RenderWindow& window);
