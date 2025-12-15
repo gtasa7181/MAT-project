@@ -372,27 +372,20 @@ void GameController::DrawMarkers(sf::RenderWindow& window)
     {
         for (int row = 0; row < mapHeight; row++)
         {
-            
             if (mainGameState.gameBoard.board[row][col] == BOARD_SQUARE_STATE::CIRCLE) {
                 sf::Sprite _s(oMarkerTexture);
-				float scaleX = mapSectionXY / oMarkerTexture.getSize().x;
-                float scaleY = mapSectionXY / oMarkerTexture.getSize().y;
-                _s.setScale(scaleX, scaleY);
+                _s.setScale(mapSectionXY / oMarkerTexture.getSize().x, 
+                            mapSectionXY / oMarkerTexture.getSize().y);  // Scale to fit tile
                 _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
                 window.draw(_s);
             }
-            else
-            {
-                if (mainGameState.gameBoard.board[row][col] == BOARD_SQUARE_STATE::CROSS) {
-                    sf::Sprite _s(xMarkerTexture);
-					float scaleX = mapSectionXY / xMarkerTexture.getSize().x;
-                    float scaleY = mapSectionXY / xMarkerTexture.getSize().y;
-                    _s.setScale(scaleX, scaleY);
-                    _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
-                    window.draw(_s);
-                }
+            else if (mainGameState.gameBoard.board[row][col] == BOARD_SQUARE_STATE::CROSS) {
+                sf::Sprite _s(xMarkerTexture);
+                _s.setScale(mapSectionXY / xMarkerTexture.getSize().x, 
+                            mapSectionXY / xMarkerTexture.getSize().y);  // Scale to fit tile
+                _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
+                window.draw(_s);
             }
-          
         }
     }
 }
