@@ -77,15 +77,15 @@ void AIActor_TicTacToe::PreTransition()
 }
 
 
-void AIActor_TicTacToe::MakeMove(int _col)  // Connect 4 only needs column{
+void AIActor_TicTacToe::MakeMove(int _col)  // Connect 4 only needs column
+{
 
-	if (gameController == nullptr)
-	{
-		std::cout << "ERROR - gameController in AIActor_TicTacToe is null" << std::endl;
-	}
-	else
+		if (gameController != nullptr)
 	{
 		gameController->MakeMove(_col);
 	}
-
+	else
+	{
+		std::cout << "ERROR - gameController in AIActor_TicTacToe is null" << std::endl;
 	}
+}
