@@ -77,8 +77,7 @@ void AIActor_TicTacToe::PreTransition()
 }
 
 
-void AIActor_TicTacToe::MakeMove(int _row, int _col)
-{
+void AIActor_TicTacToe::MakeMove(int _col)  // Connect 4 only needs column{
 
 	if (gameController == nullptr)
 	{
@@ -86,7 +85,7 @@ void AIActor_TicTacToe::MakeMove(int _row, int _col)
 	}
 	else
 	{
-		gameController->MakeMove(_row, _col);
+		gameController->MakeMove(_col);
 	}
 
 	}
