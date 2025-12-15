@@ -106,38 +106,42 @@ TicTacToeNode* TicTacToeNode::Expand()
 	{
 		return NULL; // if this is game end state, we cannot expand
 	}
-	else
+
+	// If no moves available, return NULL
+	if (availableMoves.empty())
 	{
-		// pick a random move from the unexplored ones
-		int randomMove = rand() % availableMoves.size();
-		int columnToPlay = availableMoves[randomMove];
-
-		// delete the selected move from vector
-		availableMoves.erase(availableMoves.begin() + randomMove);
-
-		// create a new child node 
-		TicTacToeNode* childNode = new TicTacToeNode();
-		childNode->setParent(this);
-
-		// flip the marker to other player
-		BOARD_SQUARE_STATE nextTurn = getOppositeMove(activePlayer);
-		childNode->setActivePlayer(nextTurn);
-
-		// create the new world state
-		GameState newWorldState;
-		newWorldState.gameBoard = this->worldState.gameBoard;
-		GameAction newAction(columnToPlay, nextTurn);
-
-		// apply the move to the board and set the child's state
-		newWorldState.SetAndApplyAction(newAction);
-		childNode->setGameState(newWorldState);
-
-		// add the newly created node as a child of current node 
-		branches.push_back(childNode);
-
-		// return node, for simulation
-		return childNode;
+		return NULL;
 	}
+
+	// pick a random move from the unexplored ones
+	int randomMove = rand() % availableMoves.size();
+	int columnToPlay = availableMoves[randomMove];
+
+	// delete the selected move from vector
+	availableMoves.erase(availableMoves.begin() + randomMove);
+
+	// create a new child node 
+	TicTacToeNode* childNode = new TicTacToeNode();
+	childNode->setParent(this);
+
+	// flip the marker to other player
+	BOARD_SQUARE_STATE nextTurn = getOppositeMove(activePlayer);
+	childNode->setActivePlayer(nextTurn);
+
+	// create the new world state
+	GameState newWorldState;
+	newWorldState.gameBoard = this->worldState.gameBoard;
+	GameAction newAction(columnToPlay, nextTurn);
+
+	// apply the move to the board and set the child's state
+	newWorldState.SetAndApplyAction(newAction);
+	childNode->setGameState(newWorldState);
+
+	// add the newly created node as a child of current node 
+	branches.push_back(childNode);
+
+	// return node, for simulation
+	return childNode;
 }
 
 /*
