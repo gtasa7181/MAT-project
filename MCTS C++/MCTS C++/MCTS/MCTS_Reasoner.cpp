@@ -26,7 +26,7 @@ void MCTS_Reasoner::Think()
 
 
 	//set the active player and the current main game state
-	rootNode->setActivePlayer(_playerMarker);
+	rootNode->setActivePlayer(_aiMarker);
 	rootNode->setGameState(_mainState);
 
 

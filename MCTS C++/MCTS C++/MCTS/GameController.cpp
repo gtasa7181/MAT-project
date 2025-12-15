@@ -242,8 +242,9 @@ void GameController::AITurn()
     if (clock.getElapsedTime().asSeconds() < turnDelay)
         return;
 
-    aiOpponent.Update(1.f);
+    UpdateBlackboardState();
 
+    aiOpponent.Update(1.f);
     ProgressNextTurn();
 
 }
