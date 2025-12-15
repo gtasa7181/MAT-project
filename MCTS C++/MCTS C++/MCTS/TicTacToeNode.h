@@ -41,7 +41,7 @@ public:
 	void CalcResult();
 
 	//status
-	std::vector<std::pair<int, int>> availableMoves; // unexplored branches
+	std::vector<int> availableMoves; // Column numbers for Connect 4
 
 private:
 
