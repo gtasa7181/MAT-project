@@ -259,9 +259,9 @@ DisplayUI can be used to display data useful for debugging or tracking on the ri
 void GameController::DisplayUI(sf::RenderWindow& window)
 {
 
-    DisplayUIText(window, statusText, 10, 800);
+    DisplayUIText(window, statusText, 10, 1000);
 
-    DisplayUIText(window, "Tic Tac Toe", 800, 50);
+    DisplayUIText(window, "Tic Tac Toe", 1000, 50);
 
     std::string _aiMark = "AI Marker : ";
     _aiMark.push_back(GetCharForState(aiMarker));
@@ -291,7 +291,7 @@ void GameController::DisplayMCTSNodes(sf::RenderWindow& window)
     float yPos = 50.f;
 
     std::string _header = "Row\tCol\tVisits\t\Wins";
-    DisplayUIText(window, _header, 800, 300);
+    DisplayUIText(window, _header, 1000, 300);
     for (int i = 0; i < _nodeActionCol.size(); i++)
     {
         std::ostringstream os;
@@ -308,7 +308,7 @@ void GameController::DisplayMCTSNodes(sf::RenderWindow& window)
         }
 
 
-        DisplayUIText(window, os.str(), 800, 300+(yPos * (i+1)));
+        DisplayUIText(window, os.str(), 1000, 300+(yPos * (i+1)));
     }
 
 }
