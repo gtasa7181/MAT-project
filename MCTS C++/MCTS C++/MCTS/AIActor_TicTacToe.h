@@ -21,7 +21,7 @@ public:
 	void Update(float _dt) override;
 	void PreTransition() override;//State Transition Functions
 
-	void MakeMove(int _row, int _col);
+	void MakeMove(int _col);
 
 	GameController* gameController;
 
