@@ -375,6 +375,9 @@ void GameController::DrawMarkers(sf::RenderWindow& window)
             
             if (mainGameState.gameBoard.board[row][col] == BOARD_SQUARE_STATE::CIRCLE) {
                 sf::Sprite _s(oMarkerTexture);
+				float scaleX = mapSectionXY / oMarkerTexture.getSize().x;
+                float scaleY = mapSectionXY / oMarkerTexture.getSize().y;
+                _s.setScale(scaleX, scaleY);
                 _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
                 window.draw(_s);
             }
@@ -382,6 +385,9 @@ void GameController::DrawMarkers(sf::RenderWindow& window)
             {
                 if (mainGameState.gameBoard.board[row][col] == BOARD_SQUARE_STATE::CROSS) {
                     sf::Sprite _s(xMarkerTexture);
+					float scaleX = mapSectionXY / xMarkerTexture.getSize().x;
+                    float scaleY = mapSectionXY / xMarkerTexture.getSize().y;
+                    _s.setScale(scaleX, scaleY);
                     _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
                     window.draw(_s);
                 }
