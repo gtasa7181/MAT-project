@@ -261,7 +261,7 @@ void GameController::DisplayUI(sf::RenderWindow& window)
 
     DisplayUIText(window, statusText, 10, 1000);
 
-    DisplayUIText(window, "Tic Tac Toe", 1000, 50);
+    DisplayUIText(window, "Connect 4", 1000, 50);
 
     std::string _aiMark = "AI Marker : ";
     _aiMark.push_back(GetCharForState(aiMarker));
@@ -269,8 +269,8 @@ void GameController::DisplayUI(sf::RenderWindow& window)
     std::string _humanMark = "Human Marker : ";
     _humanMark.push_back(GetCharForState(playerMarker));
 
-    DisplayUIText(window, _aiMark, 800, 150);
-    DisplayUIText(window, _humanMark, 800, 200);
+    DisplayUIText(window, _aiMark, 1000, 150);
+    DisplayUIText(window, _humanMark, 1000, 200);
 
 
     DisplayMCTSNodes(window);
@@ -323,7 +323,7 @@ void GameController::DisplayUIText(sf::RenderWindow& window, std::string _text, 
     text.setString(_text);
 
     // set the character size
-    text.setCharacterSize(42); // in pixels, not points!
+    text.setCharacterSize(32); // in pixels, not points!
 
     // set the color
     text.setFillColor(sf::Color::White);
