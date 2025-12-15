@@ -3,9 +3,8 @@
 #include "GameBoard.h"
 #include <vector>
 
-
 /*
-* GameState class represent current state of a tic tac toe game
+* GameState class represent current state of a Connect Four game
 */
 class GameState
 {
@@ -15,12 +14,13 @@ public:
 
 	GameState();
 
-	// state chanfing functions
+	// state changing functions
 	void SetAndApplyAction(GameAction newAction);
-
+	
 	// status checking
-	std::vector<std::pair<int, int>> GetPossibleMoves();
+	std::vector<int> GetPossibleMoves();  // Returns list of valid columns
 	BOARD_SQUARE_STATE CheckWin();
-
+	
+private:
+	int GetNextAvailableRow(int col);  // Helper for gravity
 };
-
