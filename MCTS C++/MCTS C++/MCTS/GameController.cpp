@@ -376,7 +376,7 @@ void GameController::DrawMarkers(sf::RenderWindow& window)
                 sf::Sprite _s(oMarkerTexture);
                 float scaleX = mapSectionXY / (float)oMarkerTexture.getSize().x;
                 float scaleY = mapSectionXY / (float)oMarkerTexture.getSize().y;
-                _s.setScale(scaleX, scaleY);
+                _s.setScale(sf::Vector2f(scaleX, scaleY));
                 _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
                 window.draw(_s);
             }
@@ -384,7 +384,7 @@ void GameController::DrawMarkers(sf::RenderWindow& window)
                 sf::Sprite _s(xMarkerTexture);
                 float scaleX = mapSectionXY / (float)xMarkerTexture.getSize().x;
                 float scaleY = mapSectionXY / (float)xMarkerTexture.getSize().y;
-                _s.setScale(scaleX, scaleY);
+                _s.setScale(sf::Vector2f(scaleX, scaleY));
                 _s.setPosition({ col * mapSectionXY, row * mapSectionXY });
                 window.draw(_s);
             }
