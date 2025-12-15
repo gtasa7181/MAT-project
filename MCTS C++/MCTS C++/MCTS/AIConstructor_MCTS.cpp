@@ -24,7 +24,7 @@ void AIConstructor_MCTS::DefineActions()
 		int _row = actor->GetBBValueInt("Row");
 		int _col = actor->GetBBValueInt("Col");
 
-		actor->MakeMove(_row, _col);
+		actor->MakeMove(_col);
 
 		return ActionStatus::ACTION_SUCCESS;
 		};
