@@ -1,10 +1,16 @@
 #include "GameState.h"
-
-
 #include <iostream>
+
 GameState::GameState()
 {
-
+	// Initialize empty 6x7 board
+	for (int row = 0; row < 6; row++)
+	{
+		for (int col = 0; col < 7; col++)
+		{
+			gameBoard.board[row][col] = BOARD_SQUARE_STATE::NONE;
+		}
+	}
 }
 
 /**
@@ -13,81 +19,119 @@ GameState::GameState()
 void GameState::SetAndApplyAction(GameAction newAction)
 {
 	gameAction = newAction;
-
-	// update the board
-	gameBoard.board[newAction.row][newAction.col] = newAction.playerMove;
-
+	
+	// Find the lowest available row in the column (gravity)
+	int row = GetNextAvailableRow(newAction.column);
+	
+	if (row != -1)
+	{
+		// Place the piece
+		gameBoard.board[row][newAction.column] = newAction.playerMove;
+	}
 }
 
 /**
-* setAndApplyAction will return all possible moves from the stored board state
+* GetNextAvailableRow returns the lowest empty row in a column (-1 if column is full)
 */
-std::vector<std::pair<int, int>> GameState::GetPossibleMoves()
+int GameState::GetNextAvailableRow(int col)
 {
-	std::vector<std::pair<int, int>> possibleMoves;
-
-	for (int row = 0; row < 3; row++)
+	// Start from bottom row (5) and go up
+	for (int row = 5; row >= 0; row--)
 	{
-		for (int col = 0; col < 3; col++)
+		if (gameBoard.board[row][col] == BOARD_SQUARE_STATE::NONE)
 		{
-			if (gameBoard.board[row][col] == BOARD_SQUARE_STATE::NONE)
-			{
-				// if currently empty,add to possible moves
-				possibleMoves.push_back(std::make_pair(row, col));
-			}
+			return row;
 		}
 	}
+	return -1;  // Column is full
+}
 
+/**
+* GetPossibleMoves will return all possible moves (available columns) from the stored board state
+*/
+std::vector<int> GameState::GetPossibleMoves()
+{
+	std::vector<int> possibleMoves;
+	
+	// Check each column to see if it has space
+	for (int col = 0; col < 7; col++)
+	{
+		// Check if top row of this column is empty
+		if (gameBoard.board[0][col] == BOARD_SQUARE_STATE::NONE)
+		{
+			possibleMoves.push_back(col);
+		}
+	}
+	
 	return possibleMoves;
 }
 
+
 /**
-* checkWin will check if the stored board state is a winning one for either marker and return the winnig marker
+* CheckWin will check if the stored board state is a winning one for either marker and return the winner marker
 * If there is no winning marker, NONE will be returned
 */
-
 BOARD_SQUARE_STATE GameState::CheckWin()
 {
-
-	// check each row for a match
-	for (int i = 0; i < 3; i++)
+	// Check horizontal wins
+	for (int row = 0; row < 6; row++)
 	{
-		if (gameBoard.board[i][0] != BOARD_SQUARE_STATE::NONE &&
-			gameBoard.board[i][0] == gameBoard.board[i][1] &&
-			gameBoard.board[i][0] == gameBoard.board[i][2])
+		for (int col = 0; col <= 3; col++)
 		{
-			return gameBoard.board[i][0];
-		}
-
-	}
-
-	// Check each column
-	for (int i = 0; i < 3; i++)
-	{
-		if (gameBoard.board[0][i] != BOARD_SQUARE_STATE::NONE &&
-			gameBoard.board[0][i] == gameBoard.board[1][i] &&
-			gameBoard.board[0][i] == gameBoard.board[2][i])
-		{
-			return gameBoard.board[0][i];
+			if (gameBoard.board[row][col] != BOARD_SQUARE_STATE::NONE &&
+				gameBoard.board[row][col] == gameBoard.board[row][col+1] &&
+				gameBoard.board[row][col] == gameBoard.board[row][col+2] &&
+				gameBoard.board[row][col] == gameBoard.board[row][col+3])
+			{
+				return gameBoard.board[row][col];
+			}
 		}
 	}
-
-	// Check first diagonal
-	if (gameBoard.board[0][0] != BOARD_SQUARE_STATE::NONE &&
-		gameBoard.board[0][0] == gameBoard.board[1][1] &&
-		gameBoard.board[0][0] == gameBoard.board[2][2])
+	
+	// Check vertical wins
+	for (int col = 0; col < 7; col++)
 	{
-		return gameBoard.board[0][0];
+		for (int row = 0; row <= 2; row++)
+		{
+			if (gameBoard.board[row][col] != BOARD_SQUARE_STATE::NONE &&
+				gameBoard.board[row][col] == gameBoard.board[row+1][col] &&
+				gameBoard.board[row][col] == gameBoard.board[row+2][col] &&
+				gameBoard.board[row][col] == gameBoard.board[row+3][col])
+			{
+				return gameBoard.board[row][col];
+			}
+		}
 	}
-
-	// Check second diagonal
-	if (gameBoard.board[0][2] != BOARD_SQUARE_STATE::NONE &&
-		gameBoard.board[0][2] == gameBoard.board[1][1] &&
-		gameBoard.board[0][2] == gameBoard.board[2][0])
+	
+	// Check diagonal wins (bottom-left to top-right)
+	for (int row = 3; row < 6; row++)
 	{
-		return gameBoard.board[0][2];
+		for (int col = 0; col <= 3; col++)
+		{
+			if (gameBoard.board[row][col] != BOARD_SQUARE_STATE::NONE &&
+				gameBoard.board[row][col] == gameBoard.board[row-1][col+1] &&
+				gameBoard.board[row][col] == gameBoard.board[row-2][col+2] &&
+				gameBoard.board[row][col] == gameBoard.board[row-3][col+3])
+			{
+				return gameBoard.board[row][col];
+			}
+		}
 	}
-
-	// If no-one wins return the default state
+	
+	// Check diagonal wins (top-left to bottom-right)
+	for (int row = 0; row <= 2; row++)
+	{
+		for (int col = 0; col <= 3; col++)
+		{
+			if (gameBoard.board[row][col] != BOARD_SQUARE_STATE::NONE &&
+				gameBoard.board[row][col] == gameBoard.board[row+1][col+1] &&
+				gameBoard.board[row][col] == gameBoard.board[row+2][col+2] &&
+				gameBoard.board[row][col] == gameBoard.board[row+3][col+3])
+			{
+				return gameBoard.board[row][col];
+			}
+		}
+	}
+	
 	return BOARD_SQUARE_STATE::NONE;
 }
