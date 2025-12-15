@@ -216,7 +216,7 @@ void GameController::HandleMousePress(const sf::Event::MouseButtonPressed* _mous
                 bool validMove = isValidMove(gridRow, gridCol);
                 if (validMove)
                 {
-                    MakeMove(gridRow, gridCol);
+                    MakeMove(gridCol);
                     ProgressNextTurn();
                 }
             }
@@ -569,8 +569,7 @@ void GameController::MakeMove(int _col)  // Connect 4 only needs column{
     std::string _p = "Marker ";
     _p.push_back(GetCharForState(markerTurn));
 
-    os << _p << " Move => Row:" << _row << " Col:" << _col << std::endl;
-    
+	os << _p << " Move => Col:" << _col << std::endl;    
     std::string _s = os.str();
     UpdateStatusText(_s);
 
